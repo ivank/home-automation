@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "js-bitarray": "^0.6.0",
+    "lodash": "^4.17.4"
+  }
+}
