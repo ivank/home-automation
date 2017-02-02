@@ -9,10 +9,7 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
         .setCharacteristic(Characteristic.Model, '1.0.0')
         .setCharacteristic(Characteristic.SerialNumber, 'A75C3077');
 
-    const thermostat = new Service.Thermostat('Panasonic AC').setCharacteristic(Characteristic.Name, 'Panasonic AC');
-    thermostat.getCharacteristic(Characteristic.TargetTemperature)
-        .setProps({ value: 25 })
-        .setProps({ minValue: 16, maxValue: 30 });
+    const thermostat = new Service.Thermostat('AC');
 
     function update () {
         const state = thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).value;
@@ -43,7 +40,7 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
         });
     }
 
-    thermostat.getCharacteristic(Characteristic.TargetTemperature).on('change', update);
+    thermostat.getCharacteristic(Characteristic.TargetTemperature).setProps({ maxValue: 30 }).on('change', update);
     thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).on('change', update);
 
     return {
