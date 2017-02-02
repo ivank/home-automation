@@ -8,11 +8,11 @@ const every = require('lodash/fp/every').convert({ 'cap': false });
 
 const PULSE = 450;
 const ITEMS = {
-	"intro\n": [3500, 1700],
-	"gap\n": [PULSE, 9900],
-	1: [PULSE, 1250],
-	0: [PULSE, 400],
-	"\nend": [PULSE, 0],
+	"\nintro\n": [3500, 1750],
+	"\ngap\n": [PULSE, 9900],
+	1: [PULSE, 1300],
+	0: [PULSE, 435],
+	"\nend\n": [PULSE, 0],
 };
 
 function fuzzyEquals (to, tolerance, what) {
