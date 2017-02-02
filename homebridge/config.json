@@ -9,10 +9,9 @@
     "description": "Ivan Kerin's Homebridge Setup",
 
     "accessories": [
-           {
-               "accessory":      "FakeBulb",
-               "name":           "Test lamp",
-               "bulb_name":      "Lamp1"
-           }
+        {
+           "accessory": "Panasonic AC",
+           "name": "Panasonic AC"
+        }
     ]
 }
