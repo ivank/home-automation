@@ -11,12 +11,9 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
 
     const thermostat = new Service.Thermostat('Panasonic AC').setCharacteristic(Characteristic.Name, 'Panasonic AC');
 
-    const targetTemprature = thermostat.getCharacteristic(Characteristic.TargetTemperature).setProps({ minValue: 16, maxValue: 30 });
-    const targetState = thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState);
-
     function update () {
-        const state = targetState.getValue();
-        const temprature = targetTemprature.getValue();
+        const state = thermostat.getCharacteristic(Characteristic.TargetTemperature).value;
+        const temprature = thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).value;
 
         let powerFlag = '';
         let modeFlag = '';
@@ -40,8 +37,8 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
         });
     }
 
-    targetTemprature.on('change', update);
-    targetState.on('change', update);
+    thermostat.getCharacteristic(Characteristic.TargetTemperature).on('change', update);
+    thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).on('change', update);
 
     return {
         getServices: function () {
