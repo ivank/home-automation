@@ -13,11 +13,12 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
     const thermostat = new homebridge.hap.Service.Thermostat('Panasonic AC');
 
     function update () {
-        const isActive = thermostat.getCharacteristic(homebridge.hap.Characteristic.On).value;
-        const isActiveFlag = isActive ? '-x' : '';
-        logger(`toggle active!! ${isActive}`);
+        const isActive = power.getCharacteristic(homebridge.hap.Characteristic.On).value;
+        const isActiveFlag = isActive ? '' : '-x';
 
-        child_process.exec(`sudo ~/homebridge-automation/control/control ${isActiveFlag}`, function (error, stdout) {
+        child_process.exec(`sudo ~/home-automation/control/control ${isActiveFlag}`, function (error, stdout, stderr) {
+            console.log(error);
+            console.log(stderr);
             logger(`stdout!! ${stdout}`);
         });
     }
