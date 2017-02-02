@@ -1,16 +1,19 @@
 const child_process = require('child_process');
 
 module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
-    const information = new homebridge.hap.Service.AccessoryInformation()
-        .setCharacteristic(Characteristic.Name, config.name)
-        .setCharacteristic(Characteristic.Manufacturer, 'Panasonic')
-        .setCharacteristic(Characteristic.Model, '1.0.0')
-        .setCharacteristic(Characteristic.SerialNumber, 'A75C3077');
+    const power = new homebridge.hap.Service.Switch()
+        .setCharacteristic(homebridge.hap.Characteristic.Name, 'AC Power');
 
-    const control = new homebridge.hap.Service.HeaterCooler('Panasonic AC');
+    const information = new homebridge.hap.Service.AccessoryInformation()
+        .setCharacteristic(homebridge.hap.Characteristic.Name, config.name)
+        .setCharacteristic(homebridge.hap.Characteristic.Manufacturer, 'Panasonic')
+        .setCharacteristic(homebridge.hap.Characteristic.Model, '1.0.0')
+        .setCharacteristic(homebridge.hap.Characteristic.SerialNumber, 'A75C3077');
+
+    const thermostat = new homebridge.hap.Service.Thermostat('Panasonic AC');
 
     function update () {
-        const isActive = control.getCharacteristic(homebridge.hap.Characteristic.Active).value;
+        const isActive = thermostat.getCharacteristic(homebridge.hap.Characteristic.On).value;
         const isActiveFlag = isActive ? '-x' : '';
         logger(`toggle active!! ${isActive}`);
 
@@ -19,7 +22,7 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
         });
     }
 
-    control.getCharacteristic(homebridge.hap.Characteristic.Active).on('change', update);
+    power.getCharacteristic(homebridge.hap.Characteristic.On).on('change', update);
 
     return {
         name: config.name,
@@ -30,7 +33,7 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
         },
 
         getServices: function () {
-            return [information, control];
+            return [power, information, thermostat];
         },
     };
 }
