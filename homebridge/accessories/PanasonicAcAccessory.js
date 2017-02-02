@@ -1,8 +1,7 @@
 const child_process = require('child_process');
 
 module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
-    const accessory = new homebridge.hap.Accessory('Panasonic AC', homebridge.hap.uuid.generate('ivank:panasonic:ac'));
-    const service = new homebridge.Services.HeaterCooler('Panasonic AC');
+    const service = new homebridge.hap.Service.HeaterCooler('Panasonic AC');
 
     function update () {
         const isActive = service.getCharacteristic(homebridge.hap.Characteristic.Active).value;
@@ -16,7 +15,9 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
 
     service.getCharacteristic(homebridge.hap.Characteristic.Active).on('change', update);
 
-    accessory.addService(service);
-
-    return accessory;
+    return {
+        getServices: function () {
+            [service],
+        },
+    };
 }
