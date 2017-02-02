@@ -1,0 +1,18 @@
+{
+    "bridge": {
+        "name": "Homebridge",
+        "username": "CC:22:3D:E3:CE:30",
+        "port": 51826,
+        "pin": "321-25-789"
+    },
+
+    "description": "Ivan Kerin's Homebridge Setup",
+
+    "accessories": [
+           {
+               "accessory":      "FakeBulb",
+               "name":           "Test lamp",
+               "bulb_name":      "Lamp1"
+           }
+    ]
+}
