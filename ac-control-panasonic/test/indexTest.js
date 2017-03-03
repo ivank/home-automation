@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
 const control = require('../src');
 
 describe('Control', function () {
@@ -57,5 +59,26 @@ describe('Control', function () {
             function () { control.validate({ profile: 'test' }); },
             /Profile test is not a valid profile/
         );
+    });
+
+    it('should test control', function (done) {
+        this.timeout(10000);
+
+        const binFile = path.resolve(__dirname, '../control');
+        const binTmpFile = path.resolve(__dirname, 'controlTest');
+
+        if (fs.existsSync(binFile)) {
+            fs.unlinkSync(binFile);
+        }
+
+        fs.symlinkSync(binTmpFile, 'control');
+
+        control({ mode: control.HEAT, profile: control.POWERFUL, temprature: 25 }, function (err, result) {
+            assert.equal(result, '-m HEAT -t 25 -p\n');
+
+            fs.unlinkSync(binFile);
+
+            done();
+        });
     });
 });
