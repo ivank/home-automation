@@ -1,4 +1,6 @@
 const acControlPanasonic = require('ac-control-panasonic');
+const Sensor = require('sparkfun-si7021');
+const sensor = new Sensor();
 
 module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
     const Characteristic = homebridge.hap.Characteristic;
@@ -24,6 +26,7 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
 
     thermostat.getCharacteristic(Characteristic.TargetTemperature).setProps({ maxValue: 30 }).on('change', update);
     thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).on('change', update);
+    thermostat.getCharacteristic(Characteristic.CurrentTemperature).on('get', (callback) => { sensor.temprature(callback) });
 
     return {
         getServices: function () {

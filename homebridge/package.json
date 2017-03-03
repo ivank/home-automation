@@ -9,6 +9,7 @@
     "homebridge": ">=0.2.0"
   },
   "devDependencies": {
-    "ac-control-panasonic": "file:../ac-control-panasonic"
+    "ac-control-panasonic": "file:../ac-control-panasonic",
+    "sparkfun-si7021": "file:../sparkfun-si7021"
   }
 }
