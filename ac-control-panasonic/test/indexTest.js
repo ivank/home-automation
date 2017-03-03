@@ -81,4 +81,12 @@ describe('Control', function () {
             done();
         });
     });
+
+    it('should return error', function (done) {
+        control({ mode: control.HEAT, profile: control.POWERFUL, temprature: 11 }, function (err, result) {
+            assert.equal(result, undefined);
+            assert.equal(err.message, 'Temprature 11 is not a valid (16-30)');
+            done();
+        });
+    });
 });

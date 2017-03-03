@@ -51,10 +51,13 @@ function stateToFlags(state) {
 }
 
 function control (state, callback) {
-    const flags = stateToFlags(state);
-    const binaryPath = path.resolve(__dirname, '../control');
-
-    child_process.exec('sudo ' + binaryPath + ' ' + flags, callback);
+    try {
+        const flags = stateToFlags(state);
+        const binaryPath = path.resolve(__dirname, '../control');
+        child_process.exec('sudo ' + binaryPath + ' ' + flags, callback);
+    } catch (error) {
+        callback(error);
+    }
 }
 
 control.stateToFlags = stateToFlags;
