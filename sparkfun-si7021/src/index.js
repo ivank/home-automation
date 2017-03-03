@@ -23,10 +23,25 @@ class Sensor {
             } else {
                 const msb = data[0];
                 const lsb = data[1];
-                const tempData = (msb << 8) | (lsb & 0xFC);
-                const temp = (-46.85 + (175.72 * tempData / 65536));
+                const data16 = (msb << 8) | (lsb & 0xFC);
+                const temp = (-46.85 + (175.72 * data16 / 65536));
 
                 callback (null, temp);
+            }
+        });
+    }
+
+    humidity (callback) {
+        this.wire.readBytes(0xE5, 3, function (err, data) {
+            if (err) {
+                callback(err);
+            } else {
+                const msb = data[0];
+                const lsb = data[1];
+                const data16 = (msb << 8) | (lsb & 0xFC);
+                const humidity = (-6 + (125 * data16 / 65536)) / 100;
+
+                callback (null, humidity);
             }
         });
     }

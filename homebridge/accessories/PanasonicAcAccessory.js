@@ -12,6 +12,8 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
         .setCharacteristic(Characteristic.SerialNumber, 'A75C3077');
 
     const thermostat = new Service.Thermostat('AC');
+    const heatingThreshold = 25;
+    const coolingThreshold = 20;
 
     function update () {
         const state = thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).value;
@@ -31,9 +33,30 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
         });
     }
 
-    thermostat.getCharacteristic(Characteristic.TargetTemperature).setProps({ maxValue: 30 }).on('change', update);
-    thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).on('change', update);
-    thermostat.getCharacteristic(Characteristic.CurrentTemperature).on('get', (callback) => { sensor.temprature(callback) });
+    thermostat
+        .getCharacteristic(Characteristic.TargetTemperature)
+        .setProps({ maxValue: 30 }).on('change', update);
+
+    thermostat
+        .getCharacteristic(Characteristic.TargetHeatingCoolingState)
+        .on('change', update);
+
+    thermostat
+        .getCharacteristic(Characteristic.CurrentTemperature)
+        .on('get', (callback) => { sensor.temprature(callback) });
+
+    thermostat
+        .getCharacteristic(Characteristic.CurrentRelativeHumidity)
+        .on('get', (callback) => { sensor.humidity(callback) });
+
+    thermostat
+        .getCharacteristic(Characteristic.HeatingThresholdTemperature)
+        .on('get', (callback) => { callback(null, heatingThreshold) });
+
+    thermostat
+        .getCharacteristic(Characteristic.CoolingThresholdTemperature)
+        .on('get', (callback) => { callback(null, coolingThreshold) });
+
 
     return {
         getServices: function () {

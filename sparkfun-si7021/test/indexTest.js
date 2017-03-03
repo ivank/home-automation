@@ -15,4 +15,15 @@ describe('Sensor', function () {
             done();
         });
     });
+
+    it('Should return correct humidity', function (done) {
+        const data = Buffer.from([0x5e, 0xf2, 0x6a]);
+        const readBytes = sinon.stub().callsArgWith(2, null, data);
+        const sensor = new Sensor({ wire: { readBytes } });
+
+        sensor.humidity(function (err, humidity) {
+            assert.equal(humidity, 0.40356201171875);
+            done();
+        });
+    });
 });
