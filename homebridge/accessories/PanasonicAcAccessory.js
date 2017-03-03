@@ -46,10 +46,6 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
         .on('get', (callback) => { sensor.temprature(callback) });
 
     thermostat
-        .getCharacteristic(Characteristic.CurrentRelativeHumidity)
-        .on('get', (callback) => { sensor.humidity(callback) });
-
-    thermostat
         .getCharacteristic(Characteristic.HeatingThresholdTemperature)
         .on('get', (callback) => { callback(null, heatingThreshold) });
 
