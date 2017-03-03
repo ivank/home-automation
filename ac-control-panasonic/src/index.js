@@ -56,7 +56,9 @@ function control (state, callback) {
         const binaryPath = path.resolve(__dirname, '../control');
         child_process.exec('sudo ' + binaryPath + ' ' + flags, callback);
     } catch (error) {
-        callback(error);
+        if (callback) {
+            callback(error);
+        }
     }
 }
 

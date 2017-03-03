@@ -16,11 +16,18 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
     function update () {
         const state = thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).value;
         const temprature = thermostat.getCharacteristic(Characteristic.TargetTemperature).value;
-
-        acControlPanasonic({
+        const controlState = {
             off: state === Characteristic.TargetHeatingCoolingState.OFF,
             state: state === Characteristic.TargetHeatingCoolingState.OFF ? null : state,
             temprature: temprature,
+        };
+
+        acControlPanasonic(controlState, (err, result) => {
+            if (err) {
+                logger('Error: ' + err.message);
+            } else {
+                logger('Updated temprature ' + JSON.stringify(controlState));
+            }
         });
     }
 
