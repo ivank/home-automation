@@ -51,12 +51,13 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
 
     thermostat
         .getCharacteristic(Characteristic.HeatingThresholdTemperature)
-        .on('get', (callback) => { callback(null, heatingThreshold) });
+        .on('get', (callback) => { callback(null, heatingThreshold) })
+        .on('change', (data) => { heatingThreshold = data.newValue });
 
     thermostat
         .getCharacteristic(Characteristic.CoolingThresholdTemperature)
-        .on('get', (callback) => { callback(null, coolingThreshold) });
-
+        .on('get', (callback) => { callback(null, coolingThreshold) })
+        .on('change', (data) => { coolingThreshold = data.newValue });
 
     return {
         getServices: function () {
