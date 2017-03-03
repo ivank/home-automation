@@ -18,9 +18,12 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
     function update () {
         const state = thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).value;
         const temprature = thermostat.getCharacteristic(Characteristic.TargetTemperature).value;
+        const currentTemperature = thermostat.getCharacteristic(Characteristic.CurrentTemperature).value;
+
         const controlState = {
             off: state === Characteristic.TargetHeatingCoolingState.OFF,
             state: state === Characteristic.TargetHeatingCoolingState.OFF ? null : state,
+            profile: Math.abs(temprature - currentTemperature) >= 5 ? Sensor.POWERFUL : null,
             temprature: temprature,
         };
 
@@ -35,7 +38,8 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
 
     thermostat
         .getCharacteristic(Characteristic.TargetTemperature)
-        .setProps({ maxValue: 30 }).on('change', update);
+        .setProps({ maxValue: 30 })
+        .on('change', update);
 
     thermostat
         .getCharacteristic(Characteristic.TargetHeatingCoolingState)
