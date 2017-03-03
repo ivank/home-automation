@@ -3,12 +3,16 @@ const DEFAULT_ADDRESS = 0x40;
 const DEFAULT_DEVICE = '/dev/i2c-1';
 
 class Sensor {
-    constructor({ address, device, wire }) {
-        if (wire) {
-            this.wire = wire;
+    constructor(config) {
+        if (config && config.wire) {
+            this.wire = config.wire;
         } else {
             const i2c = require('i2c');
-            this.wire = new i2c(address || DEFAULT_ADDRESS, { device: device || DEFAULT_DEVICE });
+            this.wire = new i2c(
+                config && config.address || DEFAULT_ADDRESS, {
+                    device: config && config.device || DEFAULT_DEVICE
+                }
+            );
         }
     }
 
