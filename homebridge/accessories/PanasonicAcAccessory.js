@@ -12,8 +12,8 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
         .setCharacteristic(Characteristic.SerialNumber, 'A75C3077');
 
     const thermostat = new Service.Thermostat('AC');
-    const heatingThreshold = 25;
-    const coolingThreshold = 20;
+    let heatingThreshold = 25;
+    let coolingThreshold = 20;
 
     function update () {
         const state = thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).value;
@@ -51,7 +51,7 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
 
     thermostat
         .getCharacteristic(Characteristic.HeatingThresholdTemperature)
-        .on('get', function (callback) { callback(null, heatingThreshold) })
+        .on('get', function (callback)let { callback(null, heatingThreshold) })
         .on('change', function (data) { heatingThreshold = data.newValue });
 
     thermostat
