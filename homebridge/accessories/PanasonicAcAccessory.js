@@ -47,17 +47,17 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
 
     thermostat
         .getCharacteristic(Characteristic.CurrentTemperature)
-        .on('get', (callback) => { sensor.temprature(callback) });
+        .on('get', function (callback) { sensor.temprature(callback) });
 
     thermostat
         .getCharacteristic(Characteristic.HeatingThresholdTemperature)
-        .on('get', (callback) => { callback(null, heatingThreshold) })
-        .on('change', (data) => { heatingThreshold = data.newValue });
+        .on('get', function (callback) { callback(null, heatingThreshold) })
+        .on('change', function (data) { heatingThreshold = data.newValue });
 
     thermostat
         .getCharacteristic(Characteristic.CoolingThresholdTemperature)
-        .on('get', (callback) => { callback(null, coolingThreshold) })
-        .on('change', (data) => { coolingThreshold = data.newValue });
+        .on('get', function (callback) { callback(null, coolingThreshold) })
+        .on('change', function (data) { coolingThreshold = data.newValue });
 
     return {
         getServices: function () {
