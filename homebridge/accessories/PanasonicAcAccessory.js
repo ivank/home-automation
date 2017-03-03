@@ -51,7 +51,7 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
 
     thermostat
         .getCharacteristic(Characteristic.HeatingThresholdTemperature)
-        .on('get', function (callback)let { callback(null, heatingThreshold) })
+        .on('get', function (callback) { callback(null, heatingThreshold) })
         .on('change', function (data) { heatingThreshold = data.newValue });
 
     thermostat
