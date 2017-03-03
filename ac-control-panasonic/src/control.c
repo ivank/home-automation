@@ -197,14 +197,15 @@ int main(int argc, char** argv){
         }
     }
 
-    char intro[8] = {0x40, 0x04, 0x07, 0x20,
-		      0x00, 0x00, 0x00, 0x60};
+    char intro[8] = {0x40, 0x04, 0x07, 0x20, 0x00, 0x00, 0x00, 0x60};
 
-    char frame[19] = {0b01000000, 0b00000100, 0b00000111, 0b00100000,
+    char frame[19] = {
+        0b01000000, 0b00000100, 0b00000111, 0b00100000,
         0b00000000, 0b00000000, 0b00000000, 0b00000001,
         0b00000000, 0b00000000, 0b00000000, 0b01100000,
         0b00000110, 0b00000000, 0b00000000, 0b00000001,
-        0b00000000, 0b01100000, 0b00000000};
+        0b00000000, 0b01100000, 0b00000000
+    };
 
     int i, j;
     char on_off_mode = on_off | mode;
@@ -219,7 +220,7 @@ int main(int argc, char** argv){
     char flux = swing  | fan;
 
     temp <<= 1;
-    frame[POSITION_TEMPERATURE]=temp;
+    frame[POSITION_TEMPERATURE] = temp;
     frame[POSITION_ON_OFF_MODE] = on_off_mode;
     frame[POSITION_FLUX] = flux;
     frame[POSITION_OPTION] = option;

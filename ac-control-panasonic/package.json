@@ -1,0 +1,19 @@
+{
+  "name": "ac-control-panasonic",
+  "version": "0.0.1",
+  "description": "A library for controlling panasonic AC",
+  "main": "src/index.js",
+  "bin": "dist/control",
+  "scripts": {
+    "install": "make",
+    "test": "node_modules/.bin/mocha"
+  },
+  "os": [
+    "!win32"
+  ],
+  "author": "Ivan Kerin",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  }
+}
