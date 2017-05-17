@@ -16,16 +16,39 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
     let coolingThreshold = 20;
 
     function update () {
+        const controlState = {};
+
         const state = thermostat.getCharacteristic(Characteristic.TargetHeatingCoolingState).value;
         const temprature = thermostat.getCharacteristic(Characteristic.TargetTemperature).value;
         const currentTemperature = thermostat.getCharacteristic(Characteristic.CurrentTemperature).value;
 
-        const controlState = {
-            off: state === Characteristic.TargetHeatingCoolingState.OFF,
-            state: state === Characteristic.TargetHeatingCoolingState.OFF ? null : state,
-            profile: Math.abs(temprature - currentTemperature) >= 5 ? Sensor.POWERFUL : null,
-            temprature: temprature,
-        };
+        switch (state) {
+            case Characteristic.TargetHeatingCoolingState.OFF:
+                controlState.off = true;
+                break;
+            case Characteristic.TargetHeatingCoolingState.COOL:
+                controlState.mode = 'COOL';
+                controlState.temprature = temprature;
+                controlState.profile = 'POWERFUL';
+                break;
+            case Characteristic.TargetHeatingCoolingState.HEAT:
+                controlState.mode = 'HEAT';
+                controlState.profile = 'POWERFUL';
+                controlState.temprature = temprature;
+                break;
+            case Characteristic.TargetHeatingCoolingState.AUTO:
+                controlState.profile = 'QUIET';
+                if (currentTemperature > coolingThreshold) {
+                    controlState.mode = 'COOL';
+                    controlState.temprature = coolingThreshold;
+                } else if (currentTemperature < heatingThreshold) {
+                    controlState.mode = 'HEAT';
+                    controlState.temprature = heatingThreshold;
+                } else {
+                    controlState.mode = 'AUTO';
+                }
+                break;
+        }
 
         acControlPanasonic(controlState, (err, result) => {
             if (err) {
@@ -52,12 +75,12 @@ module.exports = function PanasonicAcAccessory (homebridge, logger, config) {
     thermostat
         .getCharacteristic(Characteristic.HeatingThresholdTemperature)
         .on('get', function (callback) { callback(null, heatingThreshold) })
-        .on('change', function (data) { heatingThreshold = data.newValue });
+        .on('set', function (data) { logger(data); heatingThreshold = data.newValue });
 
     thermostat
         .getCharacteristic(Characteristic.CoolingThresholdTemperature)
         .on('get', function (callback) { callback(null, coolingThreshold) })
-        .on('change', function (data) { coolingThreshold = data.newValue });
+        .on('set', function (data) { logger(data); coolingThreshold = data.newValue });
 
     return {
         getServices: function () {
